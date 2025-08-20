@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentors Mantra</title>
+  <link rel="shortcut icon" href="https://firebasestorage.googleapis.com/v0/b/mentorsmantratestportal1.appspot.com/o/mentors%20mantra%2Fassests%2FScreenshot%202024-09-26%20002302.png?alt=media&token=b5e07d75-1f2c-429a-b453-84a9c672d162" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700;800&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      // Initialize EmailJS with your user ID
+      emailjs.init("ohw9kWt2O6xKc7WI0");
+    })();
+  </script>
+</head>
+<body id="top">
+  <header class="header" data-header>
+    <div class="container">
+      <a href="/" class="logo" style="display: flex; flex-direction: row;">
+        <img src="https://firebasestorage.googleapis.com/v0/b/mentorsmantratestportal1.appspot.com/o/mentors%20mantra%2Fassests%2FScreenshot%202024-09-26%20002302.png?alt=media&token=b5e07d75-1f2c-429a-b453-84a9c672d162" width="90" height="25" alt="logo">
+        <p class="hero-text" style="margin: 2px; font-size: large; padding-top: 7px;">Mentors Mantra</p>
+      </a>
+    </div>
+  </header>
+  <main>
+    <article>
+      <section class="section hero has-bg-image" id="home" aria-label="home" style="background-image: url('https://firebasestorage.googleapis.com/v0/b/mentorsmantratestportal1.appspot.com/o/mentors%20mantra%2Fassests%2Fhero-bg.svg?alt=media&token=b1dcda13-e616-4919-8600-f448bccec2a4')">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="h1 section-title">Empowering Education. <span class="span">Enroll</span> for a Journey</h1>
+            <p class="hero-text">Our mission is to provide learners with the best educational experience.<br>Extensive resources & guides, an active community,<br>24/7 support make it a pleasure to learn with us.</p>
+          </div>
+          <figure>
+            <form id="contact-form" class="newsletter-form">
+              <div class="element">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" required name="name" class="input-field" id="name">
+              </div>
+              <br>
+              <div class="element">
+                <label for="phone" class="form-label">Phone</label>
+                <input type="number" required name="phone" class="input-field" id="phone">
+              </div>
+              <br>
+              <div class="elemente">
+                <label for="exam" class="form-label">Exam</label>
+                <input type="text" required name="exam" class="input-field" id="exam" placeholder="JEE or NEET">
+              </div>
+              <br>
+              <label for="question" class="form-label">Any Question for us?</label>
+              <input type="text" name="question" class="input-field" id="question" placeholder="Let's talk on a call">
+              <br>
+              <button type="submit" class="btn has-before">
+                <span class="span">Submit</span>
+                <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+              </button>
+              <p id="form-message" style="color: var(--radical-red); margin-top: 10px;"></p>
+            </form>
+          </figure>
+        </div>
+      </section>
+    </article>
+  </main>
+  <script src="script.js" defer></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('contact-form');
+      if (!form) {
+        console.error('Form element with id "contact-form" not found');
+        return;
+      }
+  
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        console.log('Form submission started');
+  
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const exam = document.getElementById('exam').value;
+        const question = document.getElementById('question').value || '';
+  
+        console.log('Form data:', { name, phone, exam, question });
+  
+        // Prepare email parameters
+        const templateParams = {
+          to_email: 'mentorsmantra@gmail.com',
+          from_name: name,
+          phone_number: phone,
+          exam_type: exam,
+          question: question,
+          message_html: `
+<table border='1' cellpadding='10' cellspacing='0' style='border-collapse: collapse; width: 100%;'>
+  <tr style='background-color: #f2f2f2;'>
+    <th style='text-align: left;'>Field</th>
+    <th style='text-align: left;'>Information</th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td>${name}</td>
+  </tr>
+  <tr>
+    <td><strong>Phone Number</strong></td>
+    <td>${phone}</td>
+  </tr>
+  <tr>
+    <td><strong>Exam</strong></td>
+    <td>${exam}</td>
+  </tr>
+  <tr>
+    <td><strong>Question</strong></td>
+    <td>${question || 'No question provided'}</td>
+  </tr>
+</table>`,
+          message: `Name: ${name} \n Phone Number: ${phone} \n Exam: ${exam} \n Question: ${question || 'No question provided'}`,
+          subject: 'Contact Form Submission - Mentors Mantra'
+        };
+        
+        // Show loading message
+        document.getElementById('form-message').textContent = 'Sending your message...';
+        
+        // Send email using EmailJS
+        emailjs.send('service_675ftth', 'template_40tzong', templateParams)
+          .then(function(response) {
+            console.log('Email sent successfully:', response);
+            document.getElementById('form-message').textContent = 'Thank you! Your details have been submitted successfully.';
+            form.reset();
+          })
+          .catch(function(error) {
+            console.error('Error sending email:', error);
+            document.getElementById('form-message').textContent = 'Error submitting details. Please try again.';
+          });
+      });
+    });
+  </script>
+</body>
+</html>

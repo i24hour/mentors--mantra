@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment - Mentors Mantra</title>
+  <link rel="shortcut icon" href="https://firebasestorage.googleapis.com/v0/b/mentorsmantratestportal1.appspot.com/o/mentors%20mantra%2Fassests%2FScreenshot%202024-09-26%20002302.png?alt=media&token=b5e07d75-1f2c-429a-b453-84a9c672d162" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700;800&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@latest"></script>
+  <style>
+    .payment-section {
+      padding: 120px 0 50px;
+      background-image: url('https://firebasestorage.googleapis.com/v0/b/mentorsmantratestportal1.appspot.com/o/mentors%20mantra%2Fassests%2Fhero-bg.svg?alt=media&token=b1dcda13-e616-4919-8600-f448bccec2a4');
+      background-repeat: no-repeat;
+      background-size: cover;
+      min-height: 80vh;
+    }
+    
+    .payment-container {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+    }
+    
+    .qr-section {
+      flex: 0.8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-top: 60px;
+      margin-bottom: 60px;
+      z-index: 1;
+    }
+    
+    .qr-image {
+      width: 100%;
+      max-width: 300px;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: var(--kappel);
+      position: relative;
+    }
+    
+    .qr-image img {
+      max-width: 100%;
+      max-height: 100%;
+      display: none;
+    }
+    
+    .form-section {
+      flex: 1.2;
+      padding: 40px 30px;
+      background-color: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      min-height: 500px;
+      z-index: 0;
+    }
+    
+    .form-field {
+      margin-bottom: 25px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--eerie-black-1);
+      font-size: 18px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid var(--light-gray);
+      border-radius: 5px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    
+    .form-input:focus {
+      border-color: var(--kappel);
+      outline: none;
+    }
+    
+    .required::after {
+      content: " *";
+      color: #e74c3c;
+    }
+    
+    .submit-btn {
+      background: var(--gradient);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    
+    .submit-btn:hover {
+      opacity: 0.9;
+    }
+    
+    .upload-btn {
+      position: absolute;
+      bottom: 10px;
+      background-color: var(--kappel);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    #file-input {
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      .payment-container {
+        flex-direction: column;
+      }
+      
+      .qr-section, .form-section {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body id="top">
+  <!-- HEADER -->
+  <header class="header" data-header>
+    <div class="container">
+      <a href="/" class="logo" style="display: flex; flex-direction: row;">
+        <img src="https://firebasestorage.googleapis.com/v0/b/mentorsmantratestportal1.appspot.com/o/mentors%20mantra%2Fassests%2FScreenshot%202024-09-26%20002302.png?alt=media&token=b5e07d75-1f2c-429a-b453-84a9c672d162" width="90" height="25" alt="logo">
+        <p class="hero-text" style="margin: 2px; font-size: large; padding-top: 7px;">Mentors Mantra</p>
+      </a>
+
+      <nav class="navbar" data-navbar>
+        <div class="wrapper">
+          <button class="nav-close-btn" aria-label="close menu" data-nav-toggler>
+            <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+          </button>
+        </div>
+
+        <ul class="navbar-list">
+          <li class="navbar-item">
+            <a href="/" class="navbar-link" data-nav-link>Home</a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="/#about" class="navbar-link" data-nav-link>About</a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="/#courses" class="navbar-link" data-nav-link>Our Plans</a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="payment.html" class="navbar-link" data-nav-link>Payment</a>
+          </li>
+
+          <li class="navbar-item">
+            <a href="contact.html" class="navbar-link" data-nav-link>Contact</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button class="header-action-btn" aria-label="open menu" data-nav-toggler>
+          <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
+        </button>
+      </div>
+
+      <div class="overlay" data-nav-toggler data-overlay></div>
+    </div>
+  </header>
+
+  <!-- PAYMENT SECTION -->
+  <section class="payment-section">
+    <h1 class="h1 section-title" style="text-align: center; margin-bottom: 80px;">Payment Portal</h1>
+    <div class="payment-container">
+      <!-- QR CODE SECTION -->
+      <div class="qr-section">
+        <h2 class="h3" style="margin-bottom: 20px; text-align: center;">QR Image</h2>
+        <div class="qr-image" id="qr-container" style="display: flex; align-items: center; justify-content: center;">
+          <img src="https://firebasestorage.googleapis.com/v0/b/mentorsmantratestportal1.appspot.com/o/mentors%20mantra%2Fassests%2Fqr.png?alt=media&token=2743b546-9e2f-4082-86f6-f88cd437d99f" alt="QR Code" style="max-width: 100%; max-height: 100%; display: block;">
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+          <p>Scan QR code or <a href="https://rzp.io/rzp/egE4XMED" target="_blank" style="color: var(--kappel); font-weight: 500;">click here</a></p>
+        </div>
+      </div>
+
+      <!-- FORM SECTION -->
+      <div class="form-section">
+        <form id="payment-form">
+          <div class="form-field">
+            <label class="form-label required" for="name">Your Name</label>
+            <input type="text" id="name" class="form-input" required>
+          </div>
+          
+          <div class="form-field">
+            <label class="form-label required" for="phone">Phone no.</label>
+            <input type="tel" id="phone" class="form-input" required>
+          </div>
+          
+          <div class="form-field">
+            <label class="form-label required" for="course">Course name.</label>
+            <input type="text" id="course" class="form-input" required>
+          </div>
+          
+          <button type="submit" class="submit-btn">Submit Payment</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="script.js" defer></script>
+  
+  <!-- EmailJS Library -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const uploadBtn = document.getElementById('upload-btn');
+      const fileInput = document.getElementById('file-input');
+      const qrPreview = document.getElementById('qr-preview');
+      const qrPlaceholder = document.getElementById('qr-placeholder');
+      const form = document.getElementById('payment-form');
+      
+      // Initialize EmailJS
+      // Replace 'YOUR_PUBLIC_KEY' with your actual EmailJS public key
+      emailjs.init('ohw9kWt2O6xKc7WI0');
+      
+      // QR Image upload functionality
+      if (uploadBtn) {
+        uploadBtn.addEventListener('click', function() {
+          fileInput.click();
+        });
+      }
+      
+      if (fileInput) {
+        fileInput.addEventListener('change', function(event) {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              qrPreview.src = e.target.result;
+              qrPreview.style.display = 'block';
+              qrPlaceholder.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+      
+      // Form submission
+      form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const course = document.getElementById('course').value;
+        
+        // Show loading state
+        const submitBtn = form.querySelector('.submit-btn');
+        const originalBtnText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+        
+        // Prepare template parameters
+        const templateParams = {
+          to_email: 'mentorsmantra@gmail.com',
+          from_name: name,
+          phone_number: phone,
+          course_number: course,
+          message_html: `
+<table border='1' cellpadding='10' cellspacing='0' style='border-collapse: collapse; width: 100%;'>
+  <tr style='background-color: #f2f2f2;'>
+    <th style='text-align: left;'>Field</th>
+    <th style='text-align: left;'>Information</th>
+  </tr>
+  <tr>
+    <td><strong>Name</strong></td>
+    <td>${name}</td>
+  </tr>
+  <tr>
+    <td><strong>Phone Number</strong></td>
+    <td>${phone}</td>
+  </tr>
+  <tr>
+    <td><strong>Course</strong></td>
+    <td>${course}</td>
+  </tr>
+</table>`,
+          message: `Name: ${name} \n Phone Number: ${phone} \n Course: ${course}`,
+          subject: 'Payment Notification - Mentors Mantra'
+}
+        
+        // Send email using EmailJS
+        // Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with your actual EmailJS service and template IDs
+        emailjs.send('service_675ftth', 'template_40tzong', templateParams)
+          .then(function(response) {
+            console.log('Email sent successfully:', response);
+            alert('Payment details submitted successfully!');
+            form.reset();
+          })
+          .catch(function(error) {
+            console.error('Email sending failed:', error);
+            alert('Failed to submit payment details. Please try again.');
+          })
+          .finally(function() {
+            // Reset button state
+            submitBtn.textContent = originalBtnText;
+            submitBtn.disabled = false;
+          });
+      });
+    });
+  </script>
+</body>
+</html>
